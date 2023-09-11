@@ -1,0 +1,25 @@
+/* The Close Button */
+
+:host>dialog {
+    padding-top: 0px;
+}
+
+:host>dialog>span {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+:host>dialog>span:hover, :host>dialog>span:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+:host>dialog>div {
+    padding-top: 2em;
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    grid-gap: 10px;
+}
