@@ -25,6 +25,10 @@ class TaskView extends HTMLElement {
     constructor() {
         super();
 
+        let view = document.querySelector('task-view');
+        let templateContent = template.content;
+        view.append(templateContent);
+        
         /**
          * Fill inn rest of code
          */
