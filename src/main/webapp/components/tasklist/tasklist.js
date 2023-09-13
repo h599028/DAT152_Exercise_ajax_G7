@@ -41,7 +41,19 @@ class TaskList extends HTMLElement {
          this.tasks = [];
          this.changeCallback = null;
          this.deleteCallback = null;
+         let templatecontent = template.content;
+        
+        
+        let tasklist = templatecontent.querySelector("#tasklist");
          
+         let taskrowContent = taskrow.content;
+         
+         let tasktableContent = tasktable.content;
+         let tableBody = tasktableContent.querySelector('tbody');
+         
+         tableBody.appendChild(taskrowContent);
+         tasklist.append(tasktableContent);
+        this.append(templatecontent);
         }
 
         /**
