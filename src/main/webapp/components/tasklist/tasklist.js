@@ -36,6 +36,12 @@ class TaskList extends HTMLElement {
         /**
          * Fill inn rest of code
          */
+         
+         this.statusesList = [];
+         this.tasks = [];
+         this.changeCallback = null;
+         this.deleteCallback = null;
+         
         }
 
         /**
@@ -43,9 +49,9 @@ class TaskList extends HTMLElement {
          * @param {Array} list with all possible task statuses
          */
         setStatuseslist(allstatuses) {
-        /**
-         * Fill inn rest of code
-         */
+        
+        this.statusesList = allstatuses;
+        
         }
 
         /**
@@ -54,9 +60,23 @@ class TaskList extends HTMLElement {
          * @param {function} callback
          */
         changestatusCallback(callback) {
-        /**
-         * Fill inn rest of code
-         */
+        
+        this.changeCallback = callback;
+        
+        const selectElement = document.getElementById('statusSelect');
+        if (selectElement) {
+	
+			selectElement.addEventListener('change', (event) => {
+				
+				if (this.changeCallback) {
+					const newStatus = event.target.value;
+					this.changeCallback(newStatus);
+				}
+				
+			})
+	
+			}
+        
         }
 
         /**
@@ -65,9 +85,26 @@ class TaskList extends HTMLElement {
          * @param {function} callback
          */
         deletetaskCallback(callback) {
-        /**
-         * Fill inn rest of code
-         */
+
+		this.deleteCallback = callback;
+        
+        const taskListContainer = document.getElementById('taskListContainer');
+        if (taskListContainer) {
+	
+			taskListContainer.addEventListener('clicker', (event) => {
+				
+				if (event.target.classList.contains('delete-button')) {
+					const taskId = event.target.dataset.taskId;
+					
+					if (this.deleteCallback) {
+						this.deleteCallback(taskId);
+					}
+				}
+				
+			})
+	
+			}
+
         }
 
         /**
@@ -76,9 +113,9 @@ class TaskList extends HTMLElement {
          * @param {Object} task - Object representing a task
          */
         showTask(task) {
-        /**
-         * Fill inn rest of code
-         */
+        
+        this.tasks.unshift(task);
+        
         }
 
         /**
@@ -86,9 +123,15 @@ class TaskList extends HTMLElement {
          * @param {Object} task - Object with attributes {'id':taskId,'status':newStatus}
          */
         updateTask(task) {
-        /**
-         * Fill inn rest of code
-         */
+        
+        const updatedT = this.tasks.findIndex((t) => t.id === task.id);
+        
+        if (updatedT !== -1) {
+	
+			this.tasks[updatedT].status = task.status;
+	
+			}
+        
         }
 
         /**
@@ -96,9 +139,15 @@ class TaskList extends HTMLElement {
          * @param {Integer} task - ID of task to remove
          */
         removeTask(id) {
-        /**
-         * Fill inn rest of code
-         */
+        
+        const taskRemove = this.tasks.findIndex((task) => task.id === id);
+        
+        if (taskRemove !== -1) {
+		
+			this.tasks.splice(taskRemove, 1);
+	
+			}
+        
         }
 
         /**
@@ -106,9 +155,9 @@ class TaskList extends HTMLElement {
          * @return {Number} - Number of tasks on display in view
          */
         getNumtasks() {
-        /**
-         * Fill inn rest of code
-         */
+        
+        	return this.tasks.length;
+        
         }
 }
 customElements.define('task-list', TaskList);
