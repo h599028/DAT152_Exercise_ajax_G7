@@ -30,146 +30,182 @@ taskrow.innerHTML = `
   */
 class TaskList extends HTMLElement {
 
-        constructor() {
-                super();
+	constructor() {
+		super();
 
-        /**
-         * Fill inn rest of code
-         */
-         
-         this.statusesList = [];
-         this.tasks = [];
-         this.changeCallback = null;
-         this.deleteCallback = null;
-         let templatecontent = template.content;
-        
-        
-        let tasklist = templatecontent.querySelector("#tasklist");
-         
-         let taskrowContent = taskrow.content;
-         
-         let tasktableContent = tasktable.content;
-         let tableBody = tasktableContent.querySelector('tbody');
-         
-         tableBody.appendChild(taskrowContent);
-         tasklist.append(tasktableContent);
-        this.append(templatecontent);
-        }
+		/**
+		 * Fill inn rest of code
+		 */
 
-        /**
-         * @public
-         * @param {Array} list with all possible task statuses
-         */
-        setStatuseslist(allstatuses) {
-        
-        this.statusesList = allstatuses;
-        
-        }
+		const tasklist = document.querySelector("task-list");
 
-        /**
-         * Add callback to run on change on change of status of a task, i.e. on change in the SELECT element
-         * @public
-         * @param {function} callback
-         */
-        changestatusCallback(callback) {
-        
-        this.changeCallback = callback;
-        
-        const selectElement = document.getElementById('statusSelect');
-        if (selectElement) {
-	
+		const statusesList = [];
+		tasklist.setStatuseslist(["WAITING", "ACTIVE", "DONE"]);
+		const tasks = [
+			{
+				id: 1,
+				status: "WAITING",
+				title: "Paint roof"
+			},
+			{
+				id: 2,
+				status: "ACTIVE",
+				title: "Wash windows"
+			},
+			{
+				id: 3,
+				status: "DONE",
+				title: "Wash flooer"
+			}
+		];
+
+		this.changeCallback = null;
+		this.deleteCallback = null;
+		let templatecontent = template.content;
+
+		this.append(templatecontent);
+
+		for (let t of tasks) {
+			tasklist.showTask(t);
+		}
+
+	}
+
+	/**
+	 * @public
+	 * @param {Array} list with all possible task statuses
+	 */
+	setStatuseslist(allstatuses) {
+
+		this.statusesList = allstatuses;
+
+	}
+
+	/**
+	 * Add callback to run on change on change of status of a task, i.e. on change in the SELECT element
+	 * @public
+	 * @param {function} callback
+	 */
+	changestatusCallback(callback) {
+
+		this.changeCallback = callback;
+
+		const selectElement = document.getElementById('statusSelect');
+		if (selectElement) {
+
 			selectElement.addEventListener('change', (event) => {
-				
+
 				if (this.changeCallback) {
 					const newStatus = event.target.value;
 					this.changeCallback(newStatus);
 				}
-				
-			})
-	
-			}
-        
-        }
 
-        /**
-         * Add callback to run on click on delete button of a task
-         * @public
-         * @param {function} callback
-         */
-        deletetaskCallback(callback) {
+			})
+
+		}
+
+	}
+
+	/**
+	 * Add callback to run on click on delete button of a task
+	 * @public
+	 * @param {function} callback
+	 */
+	deletetaskCallback(callback) {
 
 		this.deleteCallback = callback;
-        
-        const taskListContainer = document.getElementById('taskListContainer');
-        if (taskListContainer) {
-	
+
+		const taskListContainer = document.getElementById('taskListContainer');
+		if (taskListContainer) {
+
 			taskListContainer.addEventListener('clicker', (event) => {
-				
+
 				if (event.target.classList.contains('delete-button')) {
 					const taskId = event.target.dataset.taskId;
-					
+
 					if (this.deleteCallback) {
 						this.deleteCallback(taskId);
 					}
 				}
-				
+
 			})
-	
-			}
 
-        }
+		}
 
-        /**
-         * Add task at top in list of tasks in the view
-         * @public
-         * @param {Object} task - Object representing a task
-         */
-        showTask(task) {
-        
-        this.tasks.unshift(task);
-        
-        }
+	}
 
-        /**
-         * Update the status of a task in the view
-         * @param {Object} task - Object with attributes {'id':taskId,'status':newStatus}
-         */
-        updateTask(task) {
-        
-        const updatedT = this.tasks.findIndex((t) => t.id === task.id);
-        
-        if (updatedT !== -1) {
-	
-			this.tasks[updatedT].status = task.status;
-	
-			}
-        
-        }
+	/**
+	 * Add task at top in list of tasks in the view
+	 * @public
+	 * @param {Object} task - Object representing a task
+	 */
+	showTask(task) {
 
-        /**
-         * Remove a task from the view
-         * @param {Integer} task - ID of task to remove
-         */
-        removeTask(id) {
-        
-        const taskRemove = this.tasks.findIndex((task) => task.id === id);
-        
-        if (taskRemove !== -1) {
+		const tablecontent = tasktable.content;
+		this.append(tablecontent);
+		const tbody = document.querySelector("tbody");
 		
-			this.tasks.splice(taskRemove, 1);
-	
-			}
-        
-        }
+		const clone = taskrow.content.cloneNode(true);
 
-        /**
-         * @public
-         * @return {Number} - Number of tasks on display in view
-         */
-        getNumtasks() {
-        
-        	return this.tasks.length;
-        
-        }
+		let td = clone.querySelectorAll("td");
+		td[0].textContent = task.title;
+		td[1].textContent = task.status;
+		
+		tbody.append(clone);
+		console.log(tbody);
+
+		/*const tasklist = document.querySelector("task-list");
+		const temp = document.querySelector("")
+		const clone = template.content.cloneNode(true);
+			let td = clone.querySelectorAll("td");
+		
+		tasklist.appendChild()
+		
+		console.log(tasklist);*/
+
+	}
+
+	/**
+	 * Update the status of a task in the view
+	 * @param {Object} task - Object with attributes {'id':taskId,'status':newStatus}
+	 */
+	updateTask(task) {
+
+		const updatedT = this.tasks.findIndex((t) => t.id == task.id);
+
+		if (updatedT !== -1) {
+
+			this.tasks[updatedT].status = task.status;
+
+		}
+
+
+	}
+
+	/**
+	 * Remove a task from the view
+	 * @param {Integer} task - ID of task to remove
+	 */
+	removeTask(id) {
+
+		const taskRemove = this.tasks.findIndex((task) => task.id === id);
+
+		if (taskRemove !== -1) {
+
+			this.tasks.splice(taskRemove, 1);
+
+		}
+
+	}
+
+	/**
+	 * @public
+	 * @return {Number} - Number of tasks on display in view
+	 */
+	getNumtasks() {
+
+		return this.tasks.length;
+
+	}
 }
 customElements.define('task-list', TaskList);
