@@ -1,5 +1,7 @@
+console.log("Testing")
 import '../tasklist/tasklist.js';
 import '../taskbox/taskbox.js';
+
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -20,20 +22,57 @@ template.innerHTML = `
   * TaskView
   * The full application view
   */
-class TaskView extends HTMLElement {
+ 
 
+class TaskView extends HTMLElement {
     constructor() {
         super();
-
+        
+        
         let view = document.querySelector('task-view');
         let templateContent = template.content;
         view.append(templateContent);
-        
-        /**
-         * Fill inn rest of code
-         */
+        this.messageUpdate();
     }
 
+    messageUpdate() {
+		console.log("messageUpdate is run");
+        // Locating the message div
+        let message = document.querySelector('#message')
+
+        // Creating a pending paragraph element
+        let para = document.createElement("p");
+        let node = document.createTextNode("Waiting for server data.")
+        para.append(node);
+
+        // We replace the old message with the new one
+        const child = document.querySelector("p");
+        message.replaceChild(para, child);
+        
+        /* 
+            Now we are supposed to make a check with ajax, to see how many tasks we have
+            and then update that with a systemcallback to tasklist
+        */
+
+        // Updating message status, and making button available
+
+        node = document.createTextNode("No tasks were found")
+        para.append(node);
+        //message.replaceChild(para, child);
+        this.enableButton(true);
+    }
+    
+    // Function to enable or disable the button for adding tasks
+    enableButton(active){
+        let button = document.querySelector("button");
+        if (active) {
+			console.log("button enabled")
+            button.removeAttribute("disabled")
+        }
+        else {
+            button.setAttribute("disabled", "");
+        }
+    }
 }
 
 customElements.define('task-view', TaskView);
