@@ -29,7 +29,7 @@ taskrow.innerHTML = `
   * Manage view with list of tasks
   */
 class TaskList extends HTMLElement {
-
+ 	
 	constructor() {
 		super();
 
@@ -38,10 +38,10 @@ class TaskList extends HTMLElement {
 		 */
 
 		const tasklist = document.querySelector("task-list");
-
-		const statusesList = [];
+		
 		tasklist.setStatuseslist(["WAITING", "ACTIVE", "DONE"]);
-		let tasks = [
+		
+		this.tasks = [
 			{
 				id: 1,
 				status: "WAITING",
@@ -58,6 +58,12 @@ class TaskList extends HTMLElement {
 				title: "Wash floor"
 			}
 		];
+		
+		let taskTEST = {
+			id: 3,
+			newStatus: "ACTIVE"
+		}
+
 
 		this.changeCallback = null;
 		this.deleteCallback = null;
@@ -65,9 +71,12 @@ class TaskList extends HTMLElement {
 
 		this.append(templatecontent);
 
-		for (let t of tasks) {
+		for (let t of this.tasks) {
 			tasklist.showTask(t);
 		}
+		
+		
+		this.updateTask(taskTEST);
 
 	}
 
@@ -176,15 +185,19 @@ class TaskList extends HTMLElement {
 	 */
 	updateTask(task) {
 
+		// console.log(this.testtest);
+		
 		const updatedT = this.tasks.findIndex((t) => t.id == task.id);
 
 		if (updatedT !== -1) {
 
-			this.tasks[updatedT].status = task.status;
+			this.tasks[updatedT].status = task.newStatus;
 
 		}
-
-
+		
+		let tr = document.getElementById(task.id).getElementsByTagName("td")[1];
+		tr.innerHTML = task.newStatus;
+		
 	}
 
 	/**
