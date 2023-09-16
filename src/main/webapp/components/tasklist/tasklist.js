@@ -41,7 +41,7 @@ class TaskList extends HTMLElement {
 
 		const statusesList = [];
 		tasklist.setStatuseslist(["WAITING", "ACTIVE", "DONE"]);
-		const tasks = [
+		let tasks = [
 			{
 				id: 1,
 				status: "WAITING",
@@ -55,7 +55,7 @@ class TaskList extends HTMLElement {
 			{
 				id: 3,
 				status: "DONE",
-				title: "Wash flooer"
+				title: "Wash floor"
 			}
 		];
 
@@ -144,24 +144,29 @@ class TaskList extends HTMLElement {
 		const tablecontent = tasktable.content;
 		this.append(tablecontent);
 		const tbody = document.querySelector("tbody");
-		
+
 		const clone = taskrow.content.cloneNode(true);
+		let tr = clone.querySelector("tr");
+		tr.setAttribute("id", task.id);
+		console.log(tr);
 
 		let td = clone.querySelectorAll("td");
 		td[0].textContent = task.title;
 		td[1].textContent = task.status;
-		
-		tbody.append(clone);
-		console.log(tbody);
 
-		/*const tasklist = document.querySelector("task-list");
-		const temp = document.querySelector("")
-		const clone = template.content.cloneNode(true);
-			let td = clone.querySelectorAll("td");
-		
-		tasklist.appendChild()
-		
-		console.log(tasklist);*/
+		let select = clone.querySelector("select");
+
+		for (let status of this.statusesList) {
+			let option = document.createElement("option");
+			let node = document.createTextNode(status);
+			option.appendChild(node);
+			option.setAttribute("value", status);
+			select.appendChild(option);
+		}
+
+		tbody.prepend(clone);
+
+		console.log(this.statusesList);
 
 	}
 
@@ -187,6 +192,8 @@ class TaskList extends HTMLElement {
 	 * @param {Integer} task - ID of task to remove
 	 */
 	removeTask(id) {
+
+
 
 		const taskRemove = this.tasks.findIndex((task) => task.id === id);
 
