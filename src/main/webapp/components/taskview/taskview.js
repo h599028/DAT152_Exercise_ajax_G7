@@ -33,6 +33,28 @@ class TaskView extends HTMLElement {
         let templateContent = template.content;
         view.append(templateContent);
         this.messageUpdate();
+        const tasklist = document.querySelector('task-list');
+		// Henter ut alle de mulige statusene som skal vises
+		$.ajax({
+			url: view.getAttribute("data-serviceurl") + "/allstatuses",
+    		type: 'GET',
+			dataType: 'json',
+    		success: function(res) {
+				tasklist.setStatuseslist(res.allstatuses)
+
+        		console.log(res);
+    		}
+		});
+		$.ajax({
+			url: view.getAttribute("data-serviceurl") + "/tasklist",
+    		type: 'GET',
+			dataType: 'json',
+    		success: function(res) {
+				for (let t of res.tasks) {
+					tasklist.showTask(t);
+				}
+			}
+		});
     }
 
     messageUpdate() {
