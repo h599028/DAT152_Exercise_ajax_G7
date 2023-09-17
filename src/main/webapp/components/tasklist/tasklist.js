@@ -29,7 +29,7 @@ taskrow.innerHTML = `
   * Manage view with list of tasks
   */
 class TaskList extends HTMLElement {
- 	
+
 	constructor() {
 		super();
 
@@ -38,7 +38,7 @@ class TaskList extends HTMLElement {
 		 */
 
 		const tasklist = document.querySelector("task-list");
-		
+
 		tasklist.setStatuseslist(["WAITING", "ACTIVE", "DONE"]);
 		this.tasks = [
 			{
@@ -57,11 +57,11 @@ class TaskList extends HTMLElement {
 				title: "Wash floor"
 			}
 		];
-		
-		let taskTEST = {
+
+		/* let taskTEST = {
 			id: 3,
 			newStatus: "ACTIVE"
-		}
+		} */
 
 
 		this.changeCallback = null;
@@ -73,9 +73,9 @@ class TaskList extends HTMLElement {
 		for (let t of this.tasks) {
 			tasklist.showTask(t);
 		}
-		
-		
-		this.updateTask(taskTEST);
+
+
+		// this.updateTask(taskTEST);
 
 	}
 
@@ -161,10 +161,16 @@ class TaskList extends HTMLElement {
 
 		// Attaching functionality to the button in the template
 		let button = clone.querySelector("button");
-		button.addEventListener("click", () => {this.removeTask(task.id)})
+		button.addEventListener("click", () => { this.removeTask(task.id) });
 
+		let statusSelector = clone.querySelector("select");
+		statusSelector.addEventListener("change", () => {
+			this.updateTask({
+				id: task.id,
+				newStatus: this.getStatusSelected(task.id)
+			})
+		});
 
-			
 
 		td[0].textContent = task.title;
 		td[1].textContent = task.status;
@@ -191,19 +197,19 @@ class TaskList extends HTMLElement {
 	 */
 	updateTask(task) {
 
-		// console.log(this.testtest);
-		
-		const updatedT = this.tasks.findIndex((t) => t.id == task.id);
+		if (confirm("Do you want to update task with id " + task.id + "?")) {
+			const updatedT = this.tasks.findIndex((t) => t.id == task.id);
 
-		if (updatedT !== -1) {
+			if (updatedT !== -1) {
 
-			this.tasks[updatedT].status = task.newStatus;
+				this.tasks[updatedT].status = task.newStatus;
 
-		}
-		
-		let tr = document.getElementById(task.id).getElementsByTagName("td")[1];
-		tr.innerHTML = task.newStatus;
-		
+			}
+
+			let tr = document.getElementById(task.id).getElementsByTagName("td")[1];
+			tr.innerHTML = task.newStatus;
+		} else { }
+
 	}
 
 	/**
@@ -211,17 +217,17 @@ class TaskList extends HTMLElement {
 	 * @param {Integer} task - ID of task to remove
 	 */
 	removeTask(id) {
-		
-		
-		console.log("Removing "+id)
- 			if (confirm("Do you want to remove task?") == true) {
+
+
+		console.log("Removing " + id);
+		if (confirm("Do you want to remove task?") == true) {
 			// Run deletetaskCallback
 
 			document.getElementById(id).remove();
-  				
-  			} else {
-  			}
+
+		} else {
 		}
+	}
 
 	/**
 	 * @public
@@ -232,5 +238,10 @@ class TaskList extends HTMLElement {
 		return this.tasks.length;
 
 	}
+
+	getStatusSelected(id) {
+		return document.getElementById(id).querySelector("select").value;
+	}
+
 }
 customElements.define('task-list', TaskList);
