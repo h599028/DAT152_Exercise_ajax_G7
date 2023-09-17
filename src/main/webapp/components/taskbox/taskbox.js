@@ -35,12 +35,12 @@ class TaskBox extends HTMLElement {
 		this.statusesList = [];
 
 		this.closeButton.addEventListener('click', () => this.close());
+
 		this.dialog.addEventListener('keydown', (event) => {
 			if (event.key === 'Escape') {
 				this.close();
 			}
 		});
-		this.addButton.addEventListener('click', () => this.addTask());
 	}
 
 	/**
@@ -74,11 +74,13 @@ class TaskBox extends HTMLElement {
 	 * @param {function} callback
 	 */
 	newtaskCallback(callback) {
-		
-        this.addButton.addEventListener('click', () => {
-            const title = this.titleInput.value;
+            this.addButton.addEventListener('click', () => {
+            const id = 20;
             const status = this.statusSelect.value;
-            const newTask = { title, status };
+            const title = this.titleInput.value;
+            
+            
+            const newTask = { title, status, id };
             callback(newTask);
         });
 	}

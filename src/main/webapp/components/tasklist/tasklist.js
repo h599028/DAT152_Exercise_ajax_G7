@@ -36,7 +36,7 @@ class TaskList extends HTMLElement {
 		/**
 		 * Fill inn rest of code
 		 */
-
+		this.statusesList;
 		const tasklist = document.querySelector("task-list");
 		this.tasks = [
 			{
@@ -64,7 +64,9 @@ class TaskList extends HTMLElement {
 
 		this.changeCallback = null;
 		this.deleteCallback = null;
+		const tablecontent = tasktable.content;
 		let templatecontent = template.content;
+		templatecontent.append(tablecontent);
 		this.append(templatecontent);
 	}
 
@@ -136,9 +138,8 @@ class TaskList extends HTMLElement {
 	 * @param {Object} task - Object representing a task
 	 */
 	showTask(task) {
-
-		const tablecontent = tasktable.content;
-		this.append(tablecontent);
+		
+		console.log(task.title)
 		const tbody = document.querySelector("tbody");
 
 		const clone = taskrow.content.cloneNode(true);
@@ -165,8 +166,9 @@ class TaskList extends HTMLElement {
 		td[1].textContent = task.status;
 
 		let select = clone.querySelector("select");
+		let list = this.statusesList
 
-		for (let status of this.statusesList) {
+		for (let status of list) {
 			let option = document.createElement("option");
 			let node = document.createTextNode(status);
 			option.appendChild(node);

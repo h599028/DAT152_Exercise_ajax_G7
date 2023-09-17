@@ -32,8 +32,11 @@ class TaskView extends HTMLElement {
         let view = document.querySelector('task-view');
         let templateContent = template.content;
         view.append(templateContent);
+        
         this.messageUpdate();
         const tasklist = document.querySelector('task-list');
+        const taskbox = document.querySelector('task-box');
+        const button = document.querySelector('button');
 		// Henter ut alle de mulige statusene som skal vises
 		$.ajax({
 			url: view.getAttribute("data-serviceurl") + "/allstatuses",
@@ -55,6 +58,8 @@ class TaskView extends HTMLElement {
 				}
 			}
 		});
+		button.addEventListener("click", () => { taskbox.show() })
+		taskbox.newtaskCallback(() => { tasklist.showTask })
     }
 
     messageUpdate() {
