@@ -40,7 +40,6 @@ class TaskList extends HTMLElement {
 		const tasklist = document.querySelector("task-list");
 		
 		tasklist.setStatuseslist(["WAITING", "ACTIVE", "DONE"]);
-		
 		this.tasks = [
 			{
 				id: 1,
@@ -87,7 +86,6 @@ class TaskList extends HTMLElement {
 	setStatuseslist(allstatuses) {
 
 		this.statusesList = allstatuses;
-
 	}
 
 	/**
@@ -160,6 +158,14 @@ class TaskList extends HTMLElement {
 		console.log(tr);
 
 		let td = clone.querySelectorAll("td");
+
+		// Attaching functionality to the button in the template
+		let button = clone.querySelector("button");
+		button.addEventListener("click", () => {this.removeTask(task.id)})
+
+
+			
+
 		td[0].textContent = task.title;
 		td[1].textContent = task.status;
 
@@ -205,18 +211,17 @@ class TaskList extends HTMLElement {
 	 * @param {Integer} task - ID of task to remove
 	 */
 	removeTask(id) {
+		
+		
+		console.log("Removing "+id)
+ 			if (confirm("Do you want to remove task?") == true) {
+			// Run deletetaskCallback
 
-
-
-		const taskRemove = this.tasks.findIndex((task) => task.id === id);
-
-		if (taskRemove !== -1) {
-
-			this.tasks.splice(taskRemove, 1);
-
+			document.getElementById(id).remove();
+  				
+  			} else {
+  			}
 		}
-
-	}
 
 	/**
 	 * @public
