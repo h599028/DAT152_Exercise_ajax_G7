@@ -38,8 +38,6 @@ class TaskList extends HTMLElement {
 		 */
 
 		const tasklist = document.querySelector("task-list");
-
-		tasklist.setStatuseslist(["WAITING", "ACTIVE", "DONE"]);
 		this.tasks = [
 			{
 				id: 1,
@@ -67,16 +65,7 @@ class TaskList extends HTMLElement {
 		this.changeCallback = null;
 		this.deleteCallback = null;
 		let templatecontent = template.content;
-
 		this.append(templatecontent);
-
-		for (let t of this.tasks) {
-			tasklist.showTask(t);
-		}
-
-
-		// this.updateTask(taskTEST);
-
 	}
 
 	/**
