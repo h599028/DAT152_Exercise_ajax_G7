@@ -61,13 +61,18 @@ class TaskList extends HTMLElement {
 	 */
 	changestatusCallback(callback, taskID) {
 		const selectElement = document.getElementById(taskID).querySelector("select");
-		statusSelector.addEventListener("change", () => {
-			let selected =this.getStatusSelected(); 
-				if(callback({
+		selectElement.addEventListener("change", () => {
+			let selected = this.getStatusSelected(); 
+			
+			if(callback({
 				id: taskID,
-				newStatus: selected})) {
-					this.updateTask({id:taskID, newStatus:selected})
-				};
+				newStatus: selected
+			})) {
+				this.updateTask({
+					id: taskID, 
+					newStatus: selected
+					})
+				}
 			/*this.updateTask({
 				id: task.id,
 				newStatus: this.getStatusSelected(task.id)

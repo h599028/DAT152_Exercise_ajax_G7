@@ -113,6 +113,7 @@ class TaskView extends HTMLElement {
 					console.log("ifelse is run");
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
+						tasklist.changestatusCallback(this.updateTask, t.id);
 						view.removeTask(t.id)
 						}
 					node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
