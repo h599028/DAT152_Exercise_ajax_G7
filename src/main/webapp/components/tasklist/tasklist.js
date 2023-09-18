@@ -36,7 +36,7 @@ class TaskList extends HTMLElement {
 		/**
 		 * Fill inn rest of code
 		 */
-		this.statusesList;
+		this.statusesList = [];
 		const tasklist = document.querySelector("task-list");
 
 		this.changeCallback = null;
@@ -60,24 +60,24 @@ class TaskList extends HTMLElement {
 	 * Add callback to run on change on change of status of a task, i.e. on change in the SELECT element
 	 * @public
 	 * @param {function} callback
+	 * @param taskID
 	 */
-	changestatusCallback(callback) {
-
-		this.changeCallback = callback;
-
-		const selectElement = document.getElementById('statusSelect');
-		if (selectElement) {
-
-			selectElement.addEventListener('change', (event) => {
-
-				if (this.changeCallback) {
-					const newStatus = event.target.value;
-					this.changeCallback(newStatus);
-				}
-
-			})
-
-		}
+	changestatusCallback(callback, taskID) {
+		const selectElement = document.getElementById(taskID).querySelector("select");
+		statusSelector.addEventListener("change", () => {
+			let selected =this.getStatusSelected(); 
+				if(callback({
+				id: taskID,
+				newStatus: selected})) {
+					this.updateTask({id:taskID, newStatus:selected})
+				};
+			/*this.updateTask({
+				id: task.id,
+				newStatus: this.getStatusSelected(task.id)
+			})*/
+		});
+		
+		
 
 	}
 

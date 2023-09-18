@@ -48,6 +48,8 @@ class TaskView extends HTMLElement {
 				console.log(res);
 			}
 		});
+		
+		
 
 		taskbox.setStatuseslist(["WATING", "ACTIVE", "DONE"]);
 		taskbox.newtaskCallback((task) => {
@@ -63,10 +65,24 @@ class TaskView extends HTMLElement {
 			}
 			taskbox.close();
 		})
-		button.addEventListener("click", () => { taskbox.show() })
+		button.addEventListener("click", () => { taskbox.show() });
 	}
 
-
+	updateStatus(task) {
+		let ok = false;
+		$.ajax({
+			url: this.view.getAttribute("data-serviceurl") + "/" + task.id,
+			type: 'PUT',
+			dataType: 'application/json; charset=utf-8',
+			data: JSON.stringify({"status": task.newStatus}),
+			success: function(res) {
+				ok=true
+				console.log("Task status updated")
+			}
+		})
+		return ok;
+	}
+	
 	messageUpdate() {
 		console.log("messageUpdate is run");
 		// Locating the message div
@@ -82,7 +98,7 @@ class TaskView extends HTMLElement {
 		// We replace the old message with the new one
 		const child = document.querySelector("p");
 		message.replaceChild(para, child);
-
+		
 		$.ajax({
 			url: view.getAttribute("data-serviceurl") + "/tasklist",
 			type: 'GET',
