@@ -30,6 +30,7 @@ class TaskView extends HTMLElement {
 
 
 		this.view = document.querySelector('task-view');
+		
 		let templateContent = template.content;
 		this.view.append(templateContent);
 
@@ -51,14 +52,16 @@ class TaskView extends HTMLElement {
 		
 		taskbox.newtaskCallback((task) => {
 			let server = this.addTask(task).then(function(res) {
+				tasklist.showTask(res.task)
+				let view = document.querySelector('task-view');
+				view.removeTask(res.task.id)
+				view.messageUpdate();
 				console.log(res)
 			}).catch(function(err) {
 				console.log(err)
 			})
 			console.log(server);
 			if (server) {
-				tasklist.showTask(task)
-				this.removeTask(task.id)
 				this.messageUpdate();
 			}
 			taskbox.close();

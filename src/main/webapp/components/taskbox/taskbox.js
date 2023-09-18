@@ -75,12 +75,11 @@ class TaskBox extends HTMLElement {
 	 */
 	newtaskCallback(callback) {
             this.addButton.addEventListener('click', () => {
-            const id = 20;
             const status = this.statusSelect.value;
             const title = this.titleInput.value;
             
             
-            const newTask = { title, status, id };
+            const newTask = { title, status};
             callback(newTask);
         });
 	}

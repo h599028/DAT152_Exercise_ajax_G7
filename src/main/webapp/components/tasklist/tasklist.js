@@ -85,7 +85,7 @@ class TaskList extends HTMLElement {
 	 */
 	deletetaskCallback(callback, taskID) {
 		console.log(taskID)
-		document.getElementById(taskID).addEventListener('click', () => {
+		document.getElementById(taskID).querySelector("button").addEventListener('click', () => {
             callback(taskID);
         })
 	}
