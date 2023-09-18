@@ -38,10 +38,6 @@ class TaskList extends HTMLElement {
 
 		this.changeCallback = null;
 		this.deleteCallback = null;
-		const tablecontent = tasktable.content;
-		let templatecontent = template.content;
-		templatecontent.append(tablecontent);
-		this.append(templatecontent);
 	}
 
 	/**
@@ -91,6 +87,11 @@ class TaskList extends HTMLElement {
 	 * @param {Object} task - Object representing a task
 	 */
 	showTask(task) {
+		
+		const tablecontent = tasktable.content;
+		let templatecontent = template.content;
+		templatecontent.append(tablecontent);
+		this.append(templatecontent);
 		
 		console.log(task.title)
 		const tbody = document.querySelector("tbody");
@@ -166,8 +167,11 @@ class TaskList extends HTMLElement {
 	 * @return {Number} - Number of tasks on display in view
 	 */
 	getNumtasks() {
-		
-		return document.querySelector("table").rows.length-1;
+		if (document.querySelector("table")) {
+			return document.querySelector("table").rows.length-1;
+			} else {
+				return 0;
+			}
 
 	}
 
