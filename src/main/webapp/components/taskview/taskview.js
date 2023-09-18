@@ -59,6 +59,7 @@ class TaskView extends HTMLElement {
 			console.log(server);
 			if (server) {
 				tasklist.showTask(task)
+				this.messageUpdate();
 			}
 			taskbox.close();
 		})
@@ -86,21 +87,25 @@ class TaskView extends HTMLElement {
 			url: view.getAttribute("data-serviceurl") + "/tasklist",
 			type: 'GET',
 			dataType: 'json',
-			success: function() {
+			success: function(res) {
 				if (tasklist.getNumtasks() > 0) {
 					console.log("if is run");
 					node = document.createTextNode(`You have ${tasklist.getNumtasks()} task(s).`);
 					para.innerHTML = '';
 					para.append(node);
+
 				} else {
 					console.log("ifelse is run");
+					for (let t of res.tasks) {
+						tasklist.showTask(t);
+						}
 					node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
 					para.innerHTML = '';
 					para.append(node);
+					}
 				}
-			}
 
-		});
+			});
 		// Updating message status, and making button available
 		this.enableButton(true);
 	}

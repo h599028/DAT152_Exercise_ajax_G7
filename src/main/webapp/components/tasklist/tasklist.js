@@ -195,6 +195,7 @@ class TaskList extends HTMLElement {
 
 		} else {
 		}
+		
 	}
 
 	/**
