@@ -58,8 +58,11 @@ class TaskView extends HTMLElement {
 				}
 			}
 		});
+		taskbox.setStatuseslist(["WATING","ACTIVE","DONE"]);
+		taskbox.newtaskCallback((task) => { 
+			tasklist.showTask(task)
+			taskbox.close(); })
 		button.addEventListener("click", () => { taskbox.show() })
-		taskbox.newtaskCallback(() => { tasklist.showTask })
     }
 
     messageUpdate() {
