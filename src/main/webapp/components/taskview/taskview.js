@@ -44,12 +44,11 @@ class TaskView extends HTMLElement {
 			dataType: 'json',
 			success: function(res) {
 				tasklist.setStatuseslist(res.allstatuses)
-
+				taskbox.setStatuseslist(res.allstatuses);
 				console.log(res);
 			}
 		});
-
-		taskbox.setStatuseslist(["WATING", "ACTIVE", "DONE"]);
+		
 		taskbox.newtaskCallback((task) => {
 			let server = this.addTask(task).then(function(res) {
 				console.log(res)
@@ -140,6 +139,22 @@ class TaskView extends HTMLElement {
 		else {
 			button.setAttribute("disabled", "");
 		}
+	}
+	
+	getStatusList() {
+		let url = this.view;
+		return new Promise(function(resolve, reject) {
+			$.ajax({
+			url: this.view.getAttribute("data-serviceurl") + "/allstatuses",
+			type: 'GET',
+			dataType: 'json',
+			success: function(res) {
+				tasklist.setStatuseslist(res.allstatuses)
+
+				console.log(res);
+			}
+			});
+		})
 	}
 }
 

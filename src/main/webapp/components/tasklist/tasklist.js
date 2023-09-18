@@ -33,10 +33,7 @@ class TaskList extends HTMLElement {
 	constructor() {
 		super();
 
-		/**
-		 * Fill inn rest of code
-		 */
-		this.statusesList;
+		this.statusesList = ["WAITING", "ACTIVE", "DONE"];
 		const tasklist = document.querySelector("task-list");
 
 		this.changeCallback = null;
