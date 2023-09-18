@@ -32,7 +32,7 @@ class TaskBox extends HTMLElement {
 		this.addButton = shadowRoot.querySelector('button[type="submit"]');
 		this.titleInput = shadowRoot.querySelector('input[type="text"]');
 		this.statusSelect = shadowRoot.querySelector('select');
-		this.statusesList = [];
+		this.statusesList = ["WAITING", "ACTIVE", "DONE"];
 
 		this.closeButton.addEventListener('click', () => this.close());
 

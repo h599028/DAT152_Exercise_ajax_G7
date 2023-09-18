@@ -44,14 +44,11 @@ class TaskView extends HTMLElement {
 			dataType: 'json',
 			success: function(res) {
 				tasklist.setStatuseslist(res.allstatuses)
-
+				taskbox.setStatuseslist(res.allstatuses);
 				console.log(res);
 			}
 		});
 		
-		
-
-		taskbox.setStatuseslist(["WATING", "ACTIVE", "DONE"]);
 		taskbox.newtaskCallback((task) => {
 			let server = this.addTask(task).then(function(res) {
 				console.log(res)
@@ -61,10 +58,12 @@ class TaskView extends HTMLElement {
 			console.log(server);
 			if (server) {
 				tasklist.showTask(task)
+				this.removeTask(task.id)
 				this.messageUpdate();
 			}
 			taskbox.close();
 		})
+		
 		button.addEventListener("click", () => { taskbox.show() });
 	}
 
@@ -90,6 +89,7 @@ class TaskView extends HTMLElement {
 		const tasklist = document.querySelector('task-list');
 		let message = document.querySelector('#message')
 
+		this.enableButton(false);
 		// Creating a pending paragraph element
 		let para = document.createElement("p");
 		let node = document.createTextNode("Waiting for server data.")
@@ -98,7 +98,6 @@ class TaskView extends HTMLElement {
 		// We replace the old message with the new one
 		const child = document.querySelector("p");
 		message.replaceChild(para, child);
-		
 		$.ajax({
 			url: view.getAttribute("data-serviceurl") + "/tasklist",
 			type: 'GET',
@@ -114,6 +113,7 @@ class TaskView extends HTMLElement {
 					console.log("ifelse is run");
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
+						view.removeTask(t.id)
 						}
 					node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
 					para.innerHTML = '';
@@ -145,6 +145,40 @@ class TaskView extends HTMLElement {
 			})
 		})
 	}
+	
+	removeTask(taskID) {
+		let list = document.querySelector("task-list")
+		list.deletetaskCallback((id) => {
+			let server = this.ajaxRemoveTask(id).then(function(res) {
+				console.log(res)
+			}).catch(function(err) {
+				console.log(err)
+			})
+			console.log(server);
+			if (server) {
+				list.removeTask(taskID);
+				this.messageUpdate();
+			}
+		}, taskID)
+	}
+	
+	ajaxRemoveTask(taskID) {
+		let url = this.view;
+		return new Promise(function(resolve, reject) {
+			$.ajax({
+				url: url.getAttribute("data-serviceurl") + "/task/"+taskID,
+				type: 'DELETE',
+				success: function(res) {
+					console.log("Task"+res.id+ "was removed")
+					resolve(res)
+				},
+				error: function(err) {
+					reject(err)
+				}
+			})
+		})
+
+	}
 
 	// Function to enable or disable the button for adding tasks
 	enableButton(active) {
@@ -154,8 +188,25 @@ class TaskView extends HTMLElement {
 			button.removeAttribute("disabled")
 		}
 		else {
+			console.log("button disabled")
 			button.setAttribute("disabled", "");
 		}
+	}
+	
+	getStatusList() {
+		let url = this.view;
+		return new Promise(function(resolve, reject) {
+			$.ajax({
+			url: this.view.getAttribute("data-serviceurl") + "/allstatuses",
+			type: 'GET',
+			dataType: 'json',
+			success: function(res) {
+				tasklist.setStatuseslist(res.allstatuses)
+
+				console.log(res);
+			}
+			});
+		})
 	}
 }
 

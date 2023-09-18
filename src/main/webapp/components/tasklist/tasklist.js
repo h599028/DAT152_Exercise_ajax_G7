@@ -32,11 +32,8 @@ class TaskList extends HTMLElement {
 
 	constructor() {
 		super();
-
-		/**
-		 * Fill inn rest of code
-		 */
-		this.statusesList = [];
+		
+		this.statusesList = ["WAITING", "ACTIVE", "DONE"];
 		const tasklist = document.querySelector("task-list");
 
 		this.changeCallback = null;
@@ -86,27 +83,11 @@ class TaskList extends HTMLElement {
 	 * @public
 	 * @param {function} callback
 	 */
-	deletetaskCallback(callback) {
-
-		this.deleteCallback = callback;
-
-		const taskListContainer = document.getElementById('taskListContainer');
-		if (taskListContainer) {
-
-			taskListContainer.addEventListener('clicker', (event) => {
-
-				if (event.target.classList.contains('delete-button')) {
-					const taskId = event.target.dataset.taskId;
-
-					if (this.deleteCallback) {
-						this.deleteCallback(taskId);
-					}
-				}
-
-			})
-
-		}
-
+	deletetaskCallback(callback, taskID) {
+		console.log(taskID)
+		document.getElementById(taskID).addEventListener('click', () => {
+            callback(taskID);
+        })
 	}
 
 	/**
@@ -125,10 +106,6 @@ class TaskList extends HTMLElement {
 		console.log(tr);
 
 		let td = clone.querySelectorAll("td");
-
-		// Attaching functionality to the button in the template
-		let button = clone.querySelector("button");
-		button.addEventListener("click", () => { this.removeTask(task.id) });
 
 		let statusSelector = clone.querySelector("select");
 		statusSelector.addEventListener("change", () => {
@@ -189,7 +166,6 @@ class TaskList extends HTMLElement {
 
 		console.log("Removing " + id);
 		if (confirm("Do you want to remove task?") == true) {
-			// Run deletetaskCallback
 
 			document.getElementById(id).remove();
 
