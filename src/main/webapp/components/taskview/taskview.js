@@ -54,7 +54,8 @@ class TaskView extends HTMLElement {
 			let server = this.addTask(task).then(function(res) {
 				tasklist.showTask(res.task)
 				let view = document.querySelector('task-view');
-				view.removeTask(res.task.id)
+				view.removeTask(res.task.id);
+				//view.updateStatus(res.t);
 				view.messageUpdate();
 				console.log(res)
 			}).catch(function(err) {
@@ -102,7 +103,8 @@ class TaskView extends HTMLElement {
 					console.log("ifelse is run");
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
-						view.removeTask(t.id)
+						view.updateStatus(t);
+						view.removeTask(t.id);
 					}
 					if (tasklist.getNumtasks() == 0) {
 						node = document.createTextNode(`No tasks were found.`);
