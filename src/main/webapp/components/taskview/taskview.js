@@ -103,7 +103,6 @@ class TaskView extends HTMLElement {
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
 						view.updateStatus(t);
-						// tasklist.changestatusCallback(this.updateStatus, t.id);
 						view.removeTask(t.id);
 						}
 					node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
@@ -155,29 +154,32 @@ class TaskView extends HTMLElement {
 	
 	updateStatus(task) {
 		let list = document.querySelector("task-list");
+		let newStatus = "";
 		list.changestatusCallback((id) => {
-			let server = this.ajaxUpdateStatus(task.id).then(function(res) {
+			newStatus = document.getElementById(task.id).querySelector("select").value;
+			let server = this.ajaxUpdateStatus(task.id, newStatus).then(function(res) {
 				console.log(res);
 			}).catch(function(err) {
 				console.log(err);
 			})
 			console.log(server);
 			if (server) {
-				//list.updateTask(task);
+				newStatus = document.getElementById(task.id).querySelector("select").value;
+				list.updateTask({id:task.id, newStatus:newStatus});
 				this.messageUpdate();
 			}
 		}, task.id)
 	}
 	
-	ajaxUpdateStatus(taskID) {
-		let newStatus = document.getElementById(taskID).querySelector("select").value;
+	ajaxUpdateStatus(taskID, newStatus) {
+		console.log(taskID);
 		console.log(newStatus);
 		let url = this.view;
 		return new Promise(function(resolve, reject){
 			$.ajax({
 			url: url.getAttribute("data-serviceurl") + "/task/" + taskID,
 			type: 'PUT',
-			dataType: 'application/json; charset=utf-8',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({status: newStatus}),
 			success: function(res) {
 				console.log("Task status updated")

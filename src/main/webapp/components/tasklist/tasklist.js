@@ -62,7 +62,10 @@ class TaskList extends HTMLElement {
 	changestatusCallback(callback, taskID) {
 		const selectElement = document.getElementById(taskID).querySelector("select");
 		selectElement.addEventListener("change", () => {
-			callback(taskID);
+			if (confirm("Do you want to update task with id " + taskID + "?")) {
+				callback(taskID);
+				
+			}
 			})	
 		
 		
@@ -133,13 +136,11 @@ class TaskList extends HTMLElement {
 	 * @param {Object} task - Object with attributes {'id':taskId,'status':newStatus}
 	 */
 	updateTask(task) {
-
-		if (confirm("Do you want to update task with id " + task.id + "?")) {
-
+		console.log("tast");
+		console.log(task);
 			let tr = document.getElementById(task.id).getElementsByTagName("td")[1];
 			console.log(tr);
 			tr.innerHTML = task.newStatus;
-		} else { }
 
 	}
 
