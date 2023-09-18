@@ -110,7 +110,8 @@ class TaskView extends HTMLElement {
 						node = document.createTextNode(`No tasks were found.`);
 						para.innerHTML = '';
 						para.append(node);
-						$("task-list").html("");
+						$("task-list").hide();
+
 					} else {
 						node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
 						para.innerHTML = '';
@@ -134,6 +135,7 @@ class TaskView extends HTMLElement {
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({ title: task.title, status: task.status }),
 				success: function(res) {
+					$("task-list").show();
 					console.log("Task was added to server")
 					resolve(res)
 				},
@@ -243,6 +245,10 @@ class TaskView extends HTMLElement {
 			});
 		})
 	}
+
+
 }
+
+
 
 customElements.define('task-view', TaskView);
