@@ -202,8 +202,8 @@ class TaskList extends HTMLElement {
 	 * @return {Number} - Number of tasks on display in view
 	 */
 	getNumtasks() {
-
-		return this.tasks.length;
+		
+		return document.querySelector("table").rows.length-1;
 
 	}
 
