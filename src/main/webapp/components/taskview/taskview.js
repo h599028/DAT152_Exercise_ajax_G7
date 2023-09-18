@@ -29,9 +29,9 @@ class TaskView extends HTMLElement {
         super();
         
         
-        let view = document.querySelector('task-view');
+        this.view = document.querySelector('task-view');
         let templateContent = template.content;
-        view.append(templateContent);
+        this.view.append(templateContent);
         
         this.messageUpdate();
         const tasklist = document.querySelector('task-list');
@@ -39,7 +39,7 @@ class TaskView extends HTMLElement {
         const button = document.querySelector('button');
 		// Henter ut alle de mulige statusene som skal vises
 		$.ajax({
-			url: view.getAttribute("data-serviceurl") + "/allstatuses",
+			url: this.view.getAttribute("data-serviceurl") + "/allstatuses",
     		type: 'GET',
 			dataType: 'json',
     		success: function(res) {
@@ -49,7 +49,7 @@ class TaskView extends HTMLElement {
     		}
 		});
 		$.ajax({
-			url: view.getAttribute("data-serviceurl") + "/tasklist",
+			url: this.view.getAttribute("data-serviceurl") + "/tasklist",
     		type: 'GET',
 			dataType: 'json',
     		success: function(res) {
@@ -59,9 +59,18 @@ class TaskView extends HTMLElement {
 			}
 		});
 		taskbox.setStatuseslist(["WATING","ACTIVE","DONE"]);
-		taskbox.newtaskCallback((task) => { 
-			tasklist.showTask(task)
-			taskbox.close(); })
+		taskbox.newtaskCallback((task) => {
+			let server = this.addTask(task).then(function(res) {
+  				console.log(res)
+			}).catch(function(err) {
+  				console.log(err)
+			})
+			console.log(server);
+			if (server) {
+				tasklist.showTask(task)
+			}
+			taskbox.close(); 
+		})
 		button.addEventListener("click", () => { taskbox.show() })
     }
 
@@ -91,6 +100,25 @@ class TaskView extends HTMLElement {
         //message.replaceChild(para, child);
         this.enableButton(true);
     }
+    
+    addTask(task){
+		let url = this.view;
+			return new Promise(function(resolve, reject) {
+			$.ajax({
+			url: url.getAttribute("data-serviceurl") + "/task",
+    		type: 'POST',
+			dataType: 'json',
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({title: task.title, status: task.status}),
+    		success: function(res) {
+				console.log("Task was added to server")
+				resolve(res)
+			},
+			error: function(err) {
+				reject(err)
+			} 
+		})})
+	}
     
     // Function to enable or disable the button for adding tasks
     enableButton(active){
