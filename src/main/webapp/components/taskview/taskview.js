@@ -70,20 +70,6 @@ class TaskView extends HTMLElement {
 		button.addEventListener("click", () => { taskbox.show() });
 	}
 
-	updateStatus(task) {
-		let ok = false;
-		$.ajax({
-			url: this.view.getAttribute("data-serviceurl") + "/" + task.id,
-			type: 'PUT',
-			dataType: 'application/json; charset=utf-8',
-			data: JSON.stringify({"status": task.newStatus}),
-			success: function(res) {
-				ok=true
-				console.log("Task status updated")
-			}
-		})
-		return ok;
-	}
 	
 	messageUpdate() {
 		console.log("messageUpdate is run");
@@ -116,8 +102,9 @@ class TaskView extends HTMLElement {
 					console.log("ifelse is run");
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
-						tasklist.changestatusCallback(this.updateTask, t.id);
-						view.removeTask(t.id)
+						view.updateStatus(t);
+						// tasklist.changestatusCallback(this.updateStatus, t.id);
+						view.removeTask(t.id);
 						}
 					node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
 					para.innerHTML = '';
@@ -164,6 +151,40 @@ class TaskView extends HTMLElement {
 				this.messageUpdate();
 			}
 		}, taskID)
+	}
+	
+	updateStatus(task) {
+		let list = document.querySelector("task-list");
+		list.changestatusCallback((id) => {
+			let server = this.ajaxUpdateStatus(task.id).then(function(res) {
+				console.log(res);
+			}).catch(function(err) {
+				console.log(err);
+			})
+			console.log(server);
+			if (server) {
+				//list.updateTask(task);
+				this.messageUpdate();
+			}
+		}, task.id)
+	}
+	
+	ajaxUpdateStatus(taskID) {
+		let newStatus = document.getElementById(taskID).querySelector("select").value;
+		console.log(newStatus);
+		let url = this.view;
+		return new Promise(function(resolve, reject){
+			$.ajax({
+			url: url.getAttribute("data-serviceurl") + "/task/" + taskID,
+			type: 'PUT',
+			dataType: 'application/json; charset=utf-8',
+			data: JSON.stringify({status: newStatus}),
+			success: function(res) {
+				console.log("Task status updated")
+			}
+		})
+		})
+		
 	}
 	
 	ajaxRemoveTask(taskID) {

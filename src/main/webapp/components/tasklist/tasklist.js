@@ -62,22 +62,9 @@ class TaskList extends HTMLElement {
 	changestatusCallback(callback, taskID) {
 		const selectElement = document.getElementById(taskID).querySelector("select");
 		selectElement.addEventListener("change", () => {
-			let selected = this.getStatusSelected(); 
-			
-			if(callback({
-				id: taskID,
-				newStatus: selected
-			})) {
-				this.updateTask({
-					id: taskID, 
-					newStatus: selected
-					})
-				}
-			/*this.updateTask({
-				id: task.id,
-				newStatus: this.getStatusSelected(task.id)
-			})*/
-		});
+			callback(taskID);
+			})	
+		
 		
 		
 
@@ -112,13 +99,13 @@ class TaskList extends HTMLElement {
 
 		let td = clone.querySelectorAll("td");
 
-		let statusSelector = clone.querySelector("select");
+		/*let statusSelector = clone.querySelector("select");
 		statusSelector.addEventListener("change", () => {
 			this.updateTask({
 				id: task.id,
 				newStatus: this.getStatusSelected(task.id)
 			})
-		});
+		});*/
 
 
 		td[0].textContent = task.title;
@@ -148,15 +135,9 @@ class TaskList extends HTMLElement {
 	updateTask(task) {
 
 		if (confirm("Do you want to update task with id " + task.id + "?")) {
-			const updatedT = this.tasks.findIndex((t) => t.id == task.id);
-
-			if (updatedT !== -1) {
-
-				this.tasks[updatedT].status = task.newStatus;
-
-			}
 
 			let tr = document.getElementById(task.id).getElementsByTagName("td")[1];
+			console.log(tr);
 			tr.innerHTML = task.newStatus;
 		} else { }
 
