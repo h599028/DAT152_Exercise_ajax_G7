@@ -30,7 +30,7 @@ class TaskView extends HTMLElement {
 
 
 		this.view = document.querySelector('task-view');
-		
+
 		let templateContent = template.content;
 		this.view.append(templateContent);
 
@@ -49,7 +49,7 @@ class TaskView extends HTMLElement {
 				console.log(res);
 			}
 		});
-		
+
 		taskbox.newtaskCallback((task) => {
 			let server = this.addTask(task).then(function(res) {
 				tasklist.showTask(res.task)
@@ -66,11 +66,11 @@ class TaskView extends HTMLElement {
 			}
 			taskbox.close();
 		})
-		
+
 		button.addEventListener("click", () => { taskbox.show() });
 	}
 
-	
+
 	messageUpdate() {
 		console.log("messageUpdate is run");
 		// Locating the message div
@@ -102,16 +102,22 @@ class TaskView extends HTMLElement {
 					console.log("ifelse is run");
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
-						view.updateStatus(t);
-						view.removeTask(t.id);
-						}
-					node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
-					para.innerHTML = '';
-					para.append(node);
+						view.removeTask(t.id)
+					}
+					if (tasklist.getNumtasks() == 0) {
+						node = document.createTextNode(`No tasks were found.`);
+						para.innerHTML = '';
+						para.append(node);
+						$("task-list").html("");
+					} else {
+						node = document.createTextNode(`${tasklist.getNumtasks()} tasks were found. `);
+						para.innerHTML = '';
+						para.append(node);
 					}
 				}
+			}
 
-			});
+		});
 		// Updating message status, and making button available
 		this.enableButton(true);
 	}
@@ -135,7 +141,7 @@ class TaskView extends HTMLElement {
 			})
 		})
 	}
-	
+
 	removeTask(taskID) {
 		let list = document.querySelector("task-list")
 		list.deletetaskCallback((id) => {
@@ -151,7 +157,7 @@ class TaskView extends HTMLElement {
 			}
 		}, taskID)
 	}
-	
+
 	updateStatus(task) {
 		let list = document.querySelector("task-list");
 		let newStatus = "";
@@ -165,38 +171,38 @@ class TaskView extends HTMLElement {
 			console.log(server);
 			if (server) {
 				newStatus = document.getElementById(task.id).querySelector("select").value;
-				list.updateTask({id:task.id, newStatus:newStatus});
+				list.updateTask({ id: task.id, newStatus: newStatus });
 				this.messageUpdate();
 			}
 		}, task.id)
 	}
-	
+
 	ajaxUpdateStatus(taskID, newStatus) {
 		console.log(taskID);
 		console.log(newStatus);
 		let url = this.view;
-		return new Promise(function(resolve, reject){
+		return new Promise(function(resolve, reject) {
 			$.ajax({
-			url: url.getAttribute("data-serviceurl") + "/task/" + taskID,
-			type: 'PUT',
-			contentType: 'application/json; charset=utf-8',
-			data: JSON.stringify({status: newStatus}),
-			success: function(res) {
-				console.log("Task status updated")
-			}
+				url: url.getAttribute("data-serviceurl") + "/task/" + taskID,
+				type: 'PUT',
+				contentType: 'application/json; charset=utf-8',
+				data: JSON.stringify({ status: newStatus }),
+				success: function(res) {
+					console.log("Task status updated")
+				}
+			})
 		})
-		})
-		
+
 	}
-	
+
 	ajaxRemoveTask(taskID) {
 		let url = this.view;
 		return new Promise(function(resolve, reject) {
 			$.ajax({
-				url: url.getAttribute("data-serviceurl") + "/task/"+taskID,
+				url: url.getAttribute("data-serviceurl") + "/task/" + taskID,
 				type: 'DELETE',
 				success: function(res) {
-					console.log("Task"+res.id+ "was removed")
+					console.log("Task" + res.id + "was removed")
 					resolve(res)
 				},
 				error: function(err) {
@@ -219,19 +225,19 @@ class TaskView extends HTMLElement {
 			button.setAttribute("disabled", "");
 		}
 	}
-	
+
 	getStatusList() {
 		let url = this.view;
 		return new Promise(function(resolve, reject) {
 			$.ajax({
-			url: this.view.getAttribute("data-serviceurl") + "/allstatuses",
-			type: 'GET',
-			dataType: 'json',
-			success: function(res) {
-				tasklist.setStatuseslist(res.allstatuses)
+				url: this.view.getAttribute("data-serviceurl") + "/allstatuses",
+				type: 'GET',
+				dataType: 'json',
+				success: function(res) {
+					tasklist.setStatuseslist(res.allstatuses)
 
-				console.log(res);
-			}
+					console.log(res);
+				}
 			});
 		})
 	}
