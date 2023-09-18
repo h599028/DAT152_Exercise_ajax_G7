@@ -38,29 +38,6 @@ class TaskList extends HTMLElement {
 		 */
 		this.statusesList;
 		const tasklist = document.querySelector("task-list");
-		this.tasks = [
-			{
-				id: 1,
-				status: "WAITING",
-				title: "Paint roof"
-			},
-			{
-				id: 2,
-				status: "ACTIVE",
-				title: "Wash windows"
-			},
-			{
-				id: 3,
-				status: "DONE",
-				title: "Wash floor"
-			}
-		];
-
-		/* let taskTEST = {
-			id: 3,
-			newStatus: "ACTIVE"
-		} */
-
 
 		this.changeCallback = null;
 		this.deleteCallback = null;
