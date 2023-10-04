@@ -75,7 +75,7 @@ class TaskList extends HTMLElement {
 	 * @param {function} callback
 	 */
 	deletetaskCallback(callback, taskID) {
-		console.log(taskID)
+
 		document.getElementById(taskID).querySelector("button").addEventListener('click', () => {
             callback(taskID);
         })
@@ -93,13 +93,13 @@ class TaskList extends HTMLElement {
 		templatecontent.append(tablecontent);
 		this.append(templatecontent);
 		
-		console.log(task.title)
+
 		const tbody = document.querySelector("tbody");
 
 		const clone = taskrow.content.cloneNode(true);
 		let tr = clone.querySelector("tr");
 		tr.setAttribute("id", task.id);
-		console.log(tr);
+
 
 		let td = clone.querySelectorAll("td");
 
@@ -128,7 +128,6 @@ class TaskList extends HTMLElement {
 
 		tbody.prepend(clone);
 
-		console.log(this.statusesList);
 
 	}
 
@@ -137,10 +136,9 @@ class TaskList extends HTMLElement {
 	 * @param {Object} task - Object with attributes {'id':taskId,'status':newStatus}
 	 */
 	updateTask(task) {
-		console.log("tast");
-		console.log(task);
+
 			let tr = document.getElementById(task.id).getElementsByTagName("td")[1];
-			console.log(tr);
+
 			tr.innerHTML = task.newStatus;
 
 	}
@@ -151,8 +149,6 @@ class TaskList extends HTMLElement {
 	 */
 	removeTask(id) {
 
-
-		console.log("Removing " + id);
 		if (confirm("Do you want to remove task?") == true) {
 
 			document.getElementById(id).remove();

@@ -1,4 +1,3 @@
-console.log("Testing")
 import '../tasklist/tasklist.js';
 import '../taskbox/taskbox.js';
 
@@ -55,7 +54,7 @@ class TaskView extends HTMLElement {
 				tasklist.showTask(res.task)
 				let view = document.querySelector('task-view');
 				view.removeTask(res.task.id);
-				//view.updateStatus(res.t);
+				view.updateStatus(res.task);
 				view.messageUpdate();
 				console.log(res)
 			}).catch(function(err) {
@@ -73,7 +72,7 @@ class TaskView extends HTMLElement {
 
 
 	messageUpdate() {
-		console.log("messageUpdate is run");
+
 		// Locating the message div
 		let view = document.querySelector('task-view');
 		const tasklist = document.querySelector('task-list');
@@ -94,13 +93,13 @@ class TaskView extends HTMLElement {
 			dataType: 'json',
 			success: function(res) {
 				if (tasklist.getNumtasks() > 0) {
-					console.log("if is run");
+
 					node = document.createTextNode(`You have ${tasklist.getNumtasks()} task(s).`);
 					para.innerHTML = '';
 					para.append(node);
 
 				} else {
-					console.log("ifelse is run");
+
 					for (let t of res.tasks) {
 						tasklist.showTask(t);
 						view.updateStatus(t);
@@ -136,7 +135,7 @@ class TaskView extends HTMLElement {
 				data: JSON.stringify({ title: task.title, status: task.status }),
 				success: function(res) {
 					$("task-list").show();
-					console.log("Task was added to server")
+
 					resolve(res)
 				},
 				error: function(err) {
@@ -192,7 +191,7 @@ class TaskView extends HTMLElement {
 				contentType: 'application/json; charset=utf-8',
 				data: JSON.stringify({ status: newStatus }),
 				success: function(res) {
-					console.log("Task status updated")
+
 				}
 			})
 		})
@@ -206,7 +205,7 @@ class TaskView extends HTMLElement {
 				url: url.getAttribute("data-serviceurl") + "/task/" + taskID,
 				type: 'DELETE',
 				success: function(res) {
-					console.log("Task" + res.id + "was removed")
+
 					resolve(res)
 				},
 				error: function(err) {
@@ -221,11 +220,11 @@ class TaskView extends HTMLElement {
 	enableButton(active) {
 		let button = document.querySelector("button");
 		if (active) {
-			console.log("button enabled")
+
 			button.removeAttribute("disabled")
 		}
 		else {
-			console.log("button disabled")
+
 			button.setAttribute("disabled", "");
 		}
 	}
